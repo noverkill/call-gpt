@@ -33,6 +33,7 @@ class StreamService extends EventEmitter {
   }
 
   sendAudio (audio) {
+    // console.log("audio", audio);
     this.ws.send(
       JSON.stringify({
         streamSid: this.streamSid,

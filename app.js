@@ -13,16 +13,20 @@ const { recordingService } = require('./services/recording-service');
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 
 const app = express();
+
 ExpressWs(app);
 
 const PORT = process.env.PORT || 3000;
+
+const stream_url = `wss://${process.env.SERVER}/connection`;
+
+// console.log('stream_url', stream_url);
 
 app.post('/incoming', (req, res) => {
   try {
     const response = new VoiceResponse();
     const connect = response.connect();
-    connect.stream({ url: `wss://${process.env.SERVER}/connection` });
-  
+    connect.stream({ url:  stream_url});
     res.type('text/xml');
     res.end(response.toString());
   } catch (err) {
@@ -111,4 +115,5 @@ app.ws('/connection', (ws) => {
 });
 
 app.listen(PORT);
+
 console.log(`Server running on port ${PORT}`);
